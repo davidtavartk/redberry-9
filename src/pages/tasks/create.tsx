@@ -1,9 +1,11 @@
+import CreateTask from "@/components/CreateTask/CreateTask";
 import React from "react";
 
 const CreateTaskPage = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <h1 className="text-3xl font-bold">Create Task Page</h1>
+    <div className="flex flex-col mx-auto h-full px-[120px]">
+      <h1 className="text-[34px] font-semibold text-[#212529] mt-16">შექმენი ახალი დავალება</h1>
+      <CreateTask />
     </div>
   );
 };

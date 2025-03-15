@@ -21,4 +21,11 @@ export interface EmployeeModalProps {
 export interface LabelProps {
   title: string;
   htmlFor: string;
+  id?: string;
+  ariaLabel?: string;
+}
+
+export interface CircleAvatarProps {
+  photoSrc: string;
+  onRemove?: () => void;
 }

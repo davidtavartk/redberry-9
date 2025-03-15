@@ -12,7 +12,7 @@ const EmployeeModal = () => {
       <Modal
         className="m-auto h-[900px] w-[913px] rounded-[10px] bg-white fixed top-0 inset-0 outline-none"
       >
-        <Dialog className="flex flex-col pt-10 pb-[60px] px-[50px] gap-[37px]">
+        <Dialog className="flex flex-col pt-10 pb-[60px] px-[50px] gap-[37px] h-full">
             <div className="self-end">
                 <button onClick={() => console.log("close")} className="">
                     <Image src="/svgs/close.svg" alt="close" width={40} height={40}/>

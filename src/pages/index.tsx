@@ -12,7 +12,6 @@ export default function Home() {
     const fetchDepartments = async () => {
       try {
         const data = await getDepartments();
-        console.log("Departments: ", data);
         setDepartments(data);
       } catch (error) {
         console.error("Error fetching departments:", error);
@@ -22,7 +21,6 @@ export default function Home() {
     const fetchPriorities = async () => {
       try {
         const data = await getPriorities();
-        console.log("Priorities", data);
         setPriorities(data);
       } catch (error) {
         console.error("Error fetching Priorities:", error);
@@ -32,7 +30,6 @@ export default function Home() {
     const fetchEmployees = async () => {
       try {
         const data = await getEmployees();
-        console.log("Employees", data);
         setEmployees(data);
       } catch (error) {
         console.error("Error fetching Employees:", error);
