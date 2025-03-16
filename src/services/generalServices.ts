@@ -1,14 +1,6 @@
-import { Department, Employee, Priority } from "@/types/types";
+import { Department, Employee, Priority, Status } from "@/types/types";
 import api from "./apiClient";
 
-// Define the TypeScript interface for statuses
-export interface Status {
-  id: number;
-  name: string;
-  icon: string;
-}
-
-// Function to get all statuses
 export const getStatuses = async (): Promise<Status[]> => {
   try {
     const response = await api.get<Status[]>("/statuses");

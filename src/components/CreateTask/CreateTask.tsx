@@ -2,8 +2,8 @@ import { useForm } from "react-hook-form";
 import Label from "../CustomForm/Label";
 import { useEffect, useState } from "react";
 import EntityDropdown from "../CustomForm/EntityDropdown";
-import { getDepartments, getEmployees, getPriorities, getStatuses, Status } from "@/services/generalServices";
-import { Department, Employee, Priority, TaskFormInputTypes } from "@/types/types";
+import { getDepartments, getEmployees, getPriorities, getStatuses } from "@/services/generalServices";
+import { Department, Employee, Priority, Status, TaskFormInputTypes } from "@/types/types";
 import { TextArea } from "react-aria-components";
 import CustomDatePicker from "./CustomDatePicker";
 

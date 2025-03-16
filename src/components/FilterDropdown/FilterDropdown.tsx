@@ -10,11 +10,7 @@ const FilterDropdown = ({ title, filters }: FilterDropdownProps) => {
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
 
   const toggleFilter = (filter: Department | Priority) => {
-    setSelectedFilters((prev) =>
-      prev.includes(filter.name)
-        ? prev.filter((f) => f !== filter.name)
-        : [...prev, filter.name],
-    );
+    setSelectedFilters((prev) => (prev.includes(filter.name) ? prev.filter((f) => f !== filter.name) : [...prev, filter.name]));
   };
 
   const applyFilters = () => {
@@ -29,11 +25,7 @@ const FilterDropdown = ({ title, filters }: FilterDropdownProps) => {
           <Image src="/svgs/downArrow.svg" alt="arrow" height={24} width={24} />
         </span>{" "}
       </Button>
-      <Popover
-        className="w-[688px] rounded-[10px] border-[0.5px] border-[#8338EC]"
-        offset={20}
-        placement="bottom start"
-      >
+      <Popover className="w-[688px] rounded-[10px] border-[0.5px] border-[#8338EC] bg-white" offset={20} placement="bottom start">
         <Dialog>
           <div className="flex flex-col gap-[25px] p-4 px-[30px] pt-10 pb-5">
             {filters.length > 0 ? (

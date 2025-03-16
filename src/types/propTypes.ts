@@ -8,6 +8,11 @@ export interface ButtonProps {
   children: React.ReactNode;
 }
 
+export interface TaskStatusProps {
+  className: string;
+  title: string;
+}
+
 export interface FilterDropdownProps {
   title: string;
   filters: Department[] | Priority[];
@@ -36,7 +41,7 @@ export interface CustomFormProps {
   close: () => void;
 }
 
-export interface EntityDropdownProps<T extends keyof (EmployeeFormInputTypes | TaskFormInputTypes)| "priority" | "status"> {
+export interface EntityDropdownProps<T extends keyof (EmployeeFormInputTypes | TaskFormInputTypes) | "priority" | "status"> {
   name: T;
   selectedEntity: string | number | null;
   className?: string;

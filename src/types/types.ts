@@ -1,3 +1,9 @@
+export interface Status {
+  id: number;
+  name: string;
+  icon: string;
+}
+
 export interface Department {
   id: number;
   name: string;
@@ -15,6 +21,17 @@ export interface Employee {
   surname: string;
   avatar: string;
   department: Department;
+}
+
+export interface Task {
+  id: number;
+  name: string;
+  description: string;
+  due_date: string;
+  status: Status;
+  priority: Priority;
+  department: Department;
+  employee: Employee;
 }
 
 export type EmployeeFormInputTypes = {
