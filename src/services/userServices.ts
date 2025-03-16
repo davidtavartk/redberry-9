@@ -1,4 +1,4 @@
-import api, { personalToken } from "./apiClient"; // Import personalToken
+import api, { personalToken } from "./apiClient";
 
 interface EmployeePayload {
   name: string;
@@ -7,23 +7,13 @@ interface EmployeePayload {
   department_id: number;
 }
 
-interface CreateEmployeeResponse {
-  id: number;
-  name: string;
-  surname: string;
-  avatar_url: string;
-  department_id: number;
-}
-
-export const getEmployees = async (): Promise<Employee[]> => {
-  try {
-    const response = await api.get<Employee[]>("/employees");
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching employees:", error);
-    throw error;
-  }
-};
+// interface CreateEmployeeResponse {
+//   id: number;
+//   name: string;
+//   surname: string;
+//   avatar_url: string;
+//   department_id: number;
+// }
 
 export const createEmployee = async (employeeData: EmployeePayload): Promise<any> => {
     try {  
