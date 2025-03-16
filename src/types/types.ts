@@ -14,5 +14,21 @@ export interface Employee {
   name: string;
   surname: string;
   avatar: string;
-  department_id: string;
+  department: Department;
 }
+
+export type FormInputTypes = {
+  name: string;
+  surname: string;
+  department: string;
+  avatar: File;
+};
+
+
+// export interface Employee {
+//   id: number;
+//   name: string;
+//   surname: string;
+//   avatar: string;
+//   department_id: string;
+// }

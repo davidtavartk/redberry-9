@@ -1,4 +1,4 @@
-import { Department, Priority } from "./types";
+import { Department, Priority, FormInputTypes } from "./types";
 
 export interface ButtonProps {
   filled?: boolean;
@@ -28,4 +28,17 @@ export interface LabelProps {
 export interface CircleAvatarProps {
   photoSrc: string;
   onRemove?: () => void;
+}
+
+export interface CustomFormProps {
+  close: () => void;
+}
+
+export interface EntityDropdownProps<T extends keyof FormInputTypes> {
+  name: T;
+  selectedEntity: string | number | null;
+  entities: { id: number; name: string }[];
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
+  setValue: (name: T, value: string, options?: { shouldValidate: boolean }) => void;
 }

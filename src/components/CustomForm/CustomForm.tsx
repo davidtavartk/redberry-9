@@ -2,30 +2,24 @@
 
 import { useForm } from "react-hook-form";
 import Label from "./Label";
-import { Button, ListBox, ListBoxItem, Popover, Select, SelectStateContext, SelectValue } from "react-aria-components";
-import { useContext, useEffect, useState } from "react";
-import { getDepartments } from "@/services/generalServices";
-import { Department } from "@/types/types";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import CircleAvatar from "./CircleAvatar";
 import CustomButton from "../UI/Button/CustomButton";
-// import debounce from "debounce";
 import CheckIcon from "../../../public/svgs/svgComponent/CheckIcon";
+import { CustomFormProps } from "@/types/propTypes";
+// import { createEmployee } from "@/services/userServices";
+import { getDepartments } from "@/services/generalServices";
+import { Department, FormInputTypes } from "@/types/types";
+import EntityDropdown from "./EntityDropdown";
 
-type FormInputTypes = {
-  name: string;
-  lastname: string;
-  department: string;
-  avatar: File | null;
-};
 
-const CustomForm = () => {
-  const [departments, setDepartments] = useState<Department[]>([]);
+
+const CustomForm = ({ close }: CustomFormProps) => {
+  const [fileName, setFileName] = useState<string | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
-  const [inputKey, setInputKey] = useState<number>(Date.now());
-
-  const state = useContext(SelectStateContext);
-  console.log("State:", state);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [departments, setDepartments] = useState<Department[]>([]);
 
   const {
     register,
@@ -33,61 +27,61 @@ const CustomForm = () => {
     watch,
     setValue,
     trigger,
-    formState: { errors },
-  } = useForm<FormInputTypes>();
+    resetField,
+    formState: { errors, isSubmitted },
+  } = useForm<FormInputTypes>({});
 
-  const formValues = watch();
   const nameValue = watch("name", "");
-  const lastnameValue = watch("lastname", "");
+  const surnameValue = watch("surname", "");
+  const selectedDepartment = watch("department");
 
-  // Log form values whenever they change
-  useEffect(() => {
-    console.log(formValues);
-  }, [formValues]);
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
 
-  const onSubmit = (data: FormInputTypes) => {
-    const formData = new FormData();
-    formData.append("name", data.name);
-    formData.append("lastname", data.lastname);
-    formData.append("department", data.department);
-    // formData.append("avatar", data.avatar[0]);
-  };
-
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { files } = e.target;
-    console.log("FILE:", files);
-
-    if (!files || files.length === 0) {
-      setPreview(null);
-      setValue("avatar", null);
-      return;
-    }
-
-    const file = files[0];
-    const maxSizeInBytes = 600 * 1024; // 600KB limit
-
-    if (file.size > maxSizeInBytes) {
-      e.target.value = "";
-      setPreview(null);
-      setValue("avatar", null);
-    } else {
-      setPreview(URL.createObjectURL(file));
-      setValue("avatar", file);
-      await trigger("avatar"); // ✅ Manually trigger validation
+    if (file) {
+      if (file.size > 1024 * 1024) {
+        alert("ატვირთეთ 1MB-ზე ნაკლები ზომის ფოტო");
+        e.target.value = "";
+        setFileName(null);
+        setPreview(null);
+        trigger("avatar");
+      } else {
+        setFileName(file.name);
+        setPreview(URL.createObjectURL(file));
+        trigger("avatar");
+      }
     }
   };
 
   const removeImage = () => {
+    setFileName(null);
     setPreview(null);
-    setValue("avatar", null);
-    setInputKey(Date.now());
+    resetField("avatar");
+  };
+
+  const onSubmit = async (data: FormInputTypes) => {
+    try {
+      const formData = new FormData();
+
+      formData.append("name", data.name);
+      formData.append("surname", data.surname);
+      if (data.avatar) {
+        formData.append("avatar", data.avatar);
+      }
+      formData.append("department_id", data.department);
+
+      console.log(data);
+
+      // const response = await createEmployee(formData);
+    } catch (error) {
+      console.error("Error creating employee:", error);
+    }
   };
 
   useEffect(() => {
     const fetchDepartments = async () => {
       try {
         const data = await getDepartments();
-        console.log("Departments: ", data);
         setDepartments(data);
       } catch (error) {
         console.error("Error fetching departments:", error);
@@ -96,7 +90,9 @@ const CustomForm = () => {
     fetchDepartments();
   }, []);
 
-  const selectedDepartment = watch("department");
+  useEffect(() => {
+    trigger("avatar");
+  }, [trigger]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex h-full flex-col justify-between">
@@ -113,27 +109,21 @@ const CustomForm = () => {
                 minLength: { value: 2, message: "მინიმუმ 2 სიმბოლო" },
                 maxLength: { value: 255, message: "მაქსიმუმ 255 სიმბოლო" },
               })}
-              onInput={() => trigger("name")}
+              onInput={(e) => {
+                const sanitizedValue = e.currentTarget.value.replace(/[^a-zA-Zა-ჰ]/g, "");
+                setValue("name", sanitizedValue, { shouldValidate: true });
+                trigger("name");
+              }}
               className="h-[42px] rounded-md border border-[#CED4DA] p-2.5"
             />
             <div className="flex flex-col gap-1 text-[10px]">
               <span
                 className={`flex items-center gap-1 ${
-                  nameValue.length >= 2
-                    ? "text-green-500" // ✅ Valid (Green)
-                    : nameValue.length > 0
-                      ? "text-red-400" // ❌ Invalid (Red, when typing but not valid)
-                      : "text-[#6C757D]" // ⏳ Default Grey (Empty)
+                  nameValue.length >= 2 ? "text-green-500" : nameValue.length > 0 ? "text-red-400" : "text-[#6C757D]"
                 }`}
               >
                 <CheckIcon
-                  fill={
-                    nameValue.length >= 2
-                      ? "#00C951" // ✅ Green
-                      : nameValue.length > 0
-                        ? "red" // ❌ Red
-                        : "#6C757D" // ⏳ Grey
-                  }
+                  fill={nameValue.length >= 2 ? "#00C951" : nameValue.length > 0 ? "red" : "#6C757D"}
                   width="16"
                   height="16"
                 />
@@ -143,23 +133,17 @@ const CustomForm = () => {
               <span
                 className={`flex items-center gap-1 ${
                   nameValue.length > 255
-                    ? "text-red-400" // ❌ Red (Too long)
+                    ? "text-red-400"
                     : nameValue.length >= 2
-                      ? "text-green-500" // ✅ Green (Valid)
+                      ? "text-green-500"
                       : nameValue.length > 0
-                        ? "text-red-400" // ❌ Red (If typing but invalid)
-                        : "text-[#6C757D]" // ⏳ Default Grey (Empty)
+                        ? "text-red-400"
+                        : "text-[#6C757D]"
                 }`}
               >
                 <CheckIcon
                   fill={
-                    nameValue.length > 255
-                      ? "red" // ❌ Red (Too long)
-                      : nameValue.length >= 2
-                        ? "#00C951" // ✅ Green (Valid)
-                        : nameValue.length > 0
-                          ? "red" // ❌ Red (If typing but invalid)
-                          : "#6C757D" // ⏳ Default Grey (Empty)
+                    nameValue.length > 255 ? "red" : nameValue.length >= 2 ? "#00C951" : nameValue.length > 0 ? "red" : "#6C757D"
                   }
                   width="16"
                   height="16"
@@ -170,38 +154,31 @@ const CustomForm = () => {
           </div>
 
           <div className="flex flex-1 flex-col gap-1">
-            <Label title="გვარი" htmlFor="lastname" />
+            <Label title="გვარი" htmlFor="surname" />
 
             <input
               type="text"
-              id="lastname"
-              {...register("lastname", {
+              id="surname"
+              {...register("surname", {
                 required: "Name is required",
                 minLength: { value: 2, message: "მინიმუმ 2 სიმბოლო" },
                 maxLength: { value: 255, message: "მაქსიმუმ 255 სიმბოლო" },
               })}
-              onInput={() => trigger("lastname")}
-
+              onInput={(e) => {
+                const sanitizedValue = e.currentTarget.value.replace(/[^a-zA-Zა-ჰ]/g, "");
+                setValue("surname", sanitizedValue, { shouldValidate: true });
+                trigger("surname");
+              }}
               className="h-[42px] rounded-md border border-[#CED4DA] p-2.5"
             />
             <div className="flex flex-col gap-1 text-[10px]">
               <span
                 className={`flex items-center gap-1 ${
-                  lastnameValue.length >= 2
-                    ? "text-green-500" // ✅ Green (Valid)
-                    : lastnameValue.length > 0
-                      ? "text-red-400" // ❌ Red (If typing but invalid)
-                      : "text-[#6C757D]" // ⏳ Default Grey (Empty)
+                  surnameValue.length >= 2 ? "text-green-500" : surnameValue.length > 0 ? "text-red-400" : "text-[#6C757D]"
                 }`}
               >
                 <CheckIcon
-                  fill={
-                    lastnameValue.length >= 2
-                      ? "#00C951" // ✅ Green (Valid)
-                      : lastnameValue.length > 0
-                        ? "red" // ❌ Red (If typing but invalid)
-                        : "#6C757D" // ⏳ Default Grey (Empty)
-                  }
+                  fill={surnameValue.length >= 2 ? "#00C951" : surnameValue.length > 0 ? "red" : "#6C757D"}
                   width="16"
                   height="16"
                 />
@@ -211,24 +188,24 @@ const CustomForm = () => {
               {/* ✅ Maximum Length Validation */}
               <span
                 className={`flex items-center gap-1 ${
-                  lastnameValue.length > 255
-                    ? "text-red-400" // ❌ Red (Too long)
-                    : lastnameValue.length >= 2
-                      ? "text-green-500" // ✅ Green (Valid)
-                      : lastnameValue.length > 0
-                        ? "text-red-400" // ❌ Red (If typing but invalid)
-                        : "text-[#6C757D]" // ⏳ Default Grey (Empty)
+                  surnameValue.length > 255
+                    ? "text-red-400"
+                    : surnameValue.length >= 2
+                      ? "text-green-500"
+                      : surnameValue.length > 0
+                        ? "text-red-400"
+                        : "text-[#6C757D]"
                 }`}
               >
                 <CheckIcon
                   fill={
-                    lastnameValue.length > 255
-                      ? "red" // ❌ Red (Too long)
-                      : lastnameValue.length >= 2
-                        ? "#00C951" // ✅ Green (Valid)
-                        : lastnameValue.length > 0
-                          ? "red" // ❌ Red (If typing but invalid)
-                          : "#6C757D" // ⏳ Default Grey (Empty)
+                    surnameValue.length > 255
+                      ? "red"
+                      : surnameValue.length >= 2
+                        ? "#00C951"
+                        : surnameValue.length > 0
+                          ? "red"
+                          : "#6C757D"
                   }
                   width="16"
                   height="16"
@@ -247,62 +224,52 @@ const CustomForm = () => {
               <CircleAvatar photoSrc={preview} onRemove={removeImage} />
             ) : (
               <label htmlFor="photo" className="cursor-pointer">
-                <CircleAvatar photoSrc="/images/avatar.png" />
+                <Image src="/svgs/uploadPhoto.svg" alt="upload" width={136} height={50} />
               </label>
             )}
             <input
-              key={inputKey}
               type="file"
               id="photo"
               accept="image/*"
-              className="hidden"
+              // className="hidden"
               {...register("avatar", {
-                required: "სურათის ატვირთვა აუცილებელია!!!@!@", // ✅ This now properly validates
+                required: "სურათის ატვირთვა აუცილებელია",
+                validate: {
+                  isImage: (file) => {
+                    if (!file) return "სურათის ატვირთვა აუცილებელია";
+                    if (file instanceof File) {
+                      const validTypes = ["image/jpeg", "image/png", "image/gif", "image/webp", "image/svg+xml"];
+                      return validTypes.includes(file.type) || "The avatar field must be an image.";
+                    }
+                    return "Invalid file format";
+                  },
+                },
               })}
-              onChange={handleFileChange} // ✅ This ensures validation updates properly
+              onChange={handleFileChange}
             />
           </div>
-          {errors.avatar && <p className="text-xs text-red-500">{errors.avatar.message}</p>}
+          {fileName && <p>ჩატვირთული ფოტო: {fileName}</p>}
+          {isSubmitted && errors.avatar && <p className="text-xs text-red-500">{errors.avatar.message}</p>}
         </div>
 
         {/* Department */}
         <div className="flex w-1/2 flex-col gap-1">
           <Label title="დეპარტამენტი" htmlFor="department" />
-          <Select id="department" selectedKey={selectedDepartment} aria-labelledby="department-label">
-            <Button
-              className={`flex w-full cursor-pointer items-center justify-between border border-[#CED4DA] p-3 text-left ${state?.isOpen ? "rounded-b-none border-b-0" : "rounded-md"}`}
-            >
-              <SelectValue>
-                {({ defaultChildren, isPlaceholder }) => {
-                  return isPlaceholder ? <></> : defaultChildren;
-                }}
-              </SelectValue>
-              <span aria-hidden="true">
-                <Image src="/svgs/formArrow.svg" alt="arrow" width={14} height={14} />
-              </span>
-            </Button>
-            <Popover
-              className="top-6 m-0 w-[406.5px] rounded-md rounded-t-none border border-t-0 border-[#CED4DA] bg-white p-3 pb-1.5"
-              placement="bottom start"
-              offset={-6}
-            >
-              <ListBox>
-                {departments.map((dept) => (
-                  <ListBoxItem key={dept.id} className="h-[42px] cursor-pointer hover:scale-[101%]">
-                    {dept.name}
-                  </ListBoxItem>
-                ))}
-              </ListBox>
-            </Popover>
-          </Select>
+          <EntityDropdown
+            name="department"
+            entities={departments}
+            selectedEntity={selectedDepartment}
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+            setValue={setValue}
+          />
         </div>
       </div>
 
-
-
-      
       <div className="flex gap-[15px] self-end">
-        <CustomButton type="button">გაუქმება</CustomButton>
+        <CustomButton type="button" onClick={close}>
+          გაუქმება
+        </CustomButton>
         <CustomButton type="submit" filled>
           დაამატე თანამშრომელი
         </CustomButton>
