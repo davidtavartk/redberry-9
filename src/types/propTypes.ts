@@ -1,4 +1,4 @@
-import { Department, Priority, FormInputTypes } from "./types";
+import { Department, Priority, EmployeeFormInputTypes, TaskFormInputTypes } from "./types";
 
 export interface ButtonProps {
   filled?: boolean;
@@ -34,7 +34,7 @@ export interface CustomFormProps {
   close: () => void;
 }
 
-export interface EntityDropdownProps<T extends keyof FormInputTypes> {
+export interface EntityDropdownProps<T extends keyof (EmployeeFormInputTypes | TaskFormInputTypes)> {
   name: T;
   selectedEntity: string | number | null;
   entities: { id: number; name: string }[];

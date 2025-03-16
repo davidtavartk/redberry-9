@@ -17,11 +17,20 @@ export interface Employee {
   department: Department;
 }
 
-export type FormInputTypes = {
+export type EmployeeFormInputTypes = {
   name: string;
   surname: string;
   department: string;
   avatar: File;
+  employee: string;
+};
+
+export type TaskFormInputTypes = {
+  title: string;
+  description: string;
+  department: string;
+  priority: string;
+  employee: string;
 };
 
 

@@ -8,9 +8,8 @@ import CircleAvatar from "./CircleAvatar";
 import CustomButton from "../UI/Button/CustomButton";
 import CheckIcon from "../../../public/svgs/svgComponent/CheckIcon";
 import { CustomFormProps } from "@/types/propTypes";
-// import { createEmployee } from "@/services/userServices";
 import { getDepartments } from "@/services/generalServices";
-import { Department, FormInputTypes } from "@/types/types";
+import { Department, EmployeeFormInputTypes } from "@/types/types";
 import EntityDropdown from "./EntityDropdown";
 
 
@@ -29,7 +28,7 @@ const CustomForm = ({ close }: CustomFormProps) => {
     trigger,
     resetField,
     formState: { errors, isSubmitted },
-  } = useForm<FormInputTypes>({});
+  } = useForm<EmployeeFormInputTypes>({});
 
   const nameValue = watch("name", "");
   const surnameValue = watch("surname", "");
@@ -59,7 +58,7 @@ const CustomForm = ({ close }: CustomFormProps) => {
     resetField("avatar");
   };
 
-  const onSubmit = async (data: FormInputTypes) => {
+  const onSubmit = async (data: EmployeeFormInputTypes) => {
     try {
       const formData = new FormData();
 

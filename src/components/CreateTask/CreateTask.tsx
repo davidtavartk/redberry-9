@@ -1,33 +1,43 @@
 import { useForm } from "react-hook-form";
 import Label from "../CustomForm/Label";
-import DepartmentDropdown from "../CustomForm/EntityDropdown";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import EntityDropdown from "../CustomForm/EntityDropdown";
+import { getEmployees } from "@/services/generalServices";
+import { Employee, TaskFormInputTypes } from "@/types/types";
 
-type FormInputTypes = {
-  title: string;
-  department: string;
-  description: string;
-  responsible_employee: string;
-};
+
 
 const CreateTask = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [employees, setEmployees] = useState<Employee[]>([]);
 
   const {
     register,
     handleSubmit,
     setValue,
     watch,
-    formState: { errors },
-  } = useForm<FormInputTypes>();
+    formState: {  },
+  } = useForm<TaskFormInputTypes>();
 
   const titleValue = watch("title", "");
-  const selectedDepartment = watch("department");
+  const selectedEmployee = watch("employee", "");
 
-  const onSubmit = (data: FormInputTypes) => {
+  const onSubmit = (data: TaskFormInputTypes) => {
     console.log(data);
   };
+
+  useEffect(() => {
+    const fetchDepartments = async () => {
+      try {
+        const data = await getEmployees();
+        setEmployees(data);
+      } catch (error) {
+        console.error("Error fetching departments:", error);
+      }
+    };
+    fetchDepartments();
+  }, []);
+  
 
   return (
     <div className="rounded-sm border-[0.3px] border-[#DDD2FF] bg-[#FBF9FFA6] p-4">
@@ -36,10 +46,10 @@ const CreateTask = () => {
           <div className="flex justify-between gap-[45px]">
             {/* Title */}
             <div className="flex flex-1 flex-col gap-1">
-              <Label title="სათაური" htmlFor="text" />
+              <Label title="სათაური" htmlFor="title" />
               <input
                 type="text"
-                id="name"
+                id="title"
                 {...register("title", {
                   required: "Title is required",
                   minLength: { value: 2, message: "მინიმუმ 2 სიმბოლო" },
@@ -74,14 +84,14 @@ const CreateTask = () => {
 
             <div className="flex w-1/2 flex-col gap-1">
               <Label title="დეპარტამენტი" htmlFor="department" />
-              {/* <EntityDropdown
-                name="employees"
+              <EntityDropdown
+                name="employee"
                 entities={employees}
-                selectedEntity={selectedDepartment}
+                selectedEntity={selectedEmployee}
                 isOpen={isOpen}
                 setIsOpen={setIsOpen}
                 setValue={setValue}
-              /> */}
+              />
             </div>
           </div>
 
