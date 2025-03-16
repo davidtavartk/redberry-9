@@ -99,7 +99,7 @@ const CustomForm = ({ close }: CustomFormProps) => {
         <div className="flex gap-[45px]">
           {/* Name */}
           <div className="flex flex-1 flex-col gap-1">
-            <Label title="სახელი" htmlFor="text" />
+            <Label title="სახელი" htmlFor="text" isRequired/>
             <input
               type="text"
               id="name"
@@ -113,7 +113,7 @@ const CustomForm = ({ close }: CustomFormProps) => {
                 setValue("name", sanitizedValue, { shouldValidate: true });
                 trigger("name");
               }}
-              className="h-[42px] rounded-md border border-[#CED4DA] p-2.5"
+              className="h-[45px] rounded-md border border-[#CED4DA] p-2.5"
             />
             <div className="flex flex-col gap-1 text-[10px]">
               <span
@@ -153,7 +153,7 @@ const CustomForm = ({ close }: CustomFormProps) => {
           </div>
 
           <div className="flex flex-1 flex-col gap-1">
-            <Label title="გვარი" htmlFor="surname" />
+            <Label title="გვარი" htmlFor="surname" isRequired/>
 
             <input
               type="text"
@@ -168,7 +168,7 @@ const CustomForm = ({ close }: CustomFormProps) => {
                 setValue("surname", sanitizedValue, { shouldValidate: true });
                 trigger("surname");
               }}
-              className="h-[42px] rounded-md border border-[#CED4DA] p-2.5"
+              className="h-[45px] rounded-md border border-[#CED4DA] p-2.5"
             />
             <div className="flex flex-col gap-1 text-[10px]">
               <span
@@ -217,7 +217,7 @@ const CustomForm = ({ close }: CustomFormProps) => {
 
         {/* Avatar Upload */}
         <div>
-          <Label title="ავატარი" htmlFor="photo" />
+          <Label title="ავატარი" htmlFor="photo" isRequired/>
           <div className="flex h-[120px] flex-col items-center justify-center rounded-lg border border-dashed border-[#CED4DA]">
             {preview ? (
               <CircleAvatar photoSrc={preview} onRemove={removeImage} />
@@ -253,7 +253,7 @@ const CustomForm = ({ close }: CustomFormProps) => {
 
         {/* Department */}
         <div className="flex w-1/2 flex-col gap-1">
-          <Label title="დეპარტამენტი" htmlFor="department" />
+          <Label title="დეპარტამენტი" htmlFor="department" isRequired/>
           <EntityDropdown
             name="department"
             entities={departments}
@@ -261,6 +261,7 @@ const CustomForm = ({ close }: CustomFormProps) => {
             isOpen={isOpen}
             setIsOpen={setIsOpen}
             setValue={setValue}
+            dropdownWidth={384}
           />
         </div>
       </div>

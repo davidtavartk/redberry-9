@@ -23,10 +23,12 @@ export interface LabelProps {
   htmlFor: string;
   id?: string;
   ariaLabel?: string;
+  isRequired?: boolean;
 }
 
 export interface CircleAvatarProps {
   photoSrc: string;
+  size?: number;
   onRemove?: () => void;
 }
 
@@ -34,11 +36,13 @@ export interface CustomFormProps {
   close: () => void;
 }
 
-export interface EntityDropdownProps<T extends keyof (EmployeeFormInputTypes | TaskFormInputTypes)> {
+export interface EntityDropdownProps<T extends keyof (EmployeeFormInputTypes | TaskFormInputTypes)| "priority" | "status"> {
   name: T;
   selectedEntity: string | number | null;
+  className?: string;
   entities: { id: number; name: string }[];
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
   setValue: (name: T, value: string, options?: { shouldValidate: boolean }) => void;
+  dropdownWidth?: number;
 }

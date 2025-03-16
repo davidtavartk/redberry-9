@@ -29,8 +29,9 @@ export type TaskFormInputTypes = {
   title: string;
   description: string;
   department: string;
-  priority: string;
   employee: string;
+  priority: string;
+  status: string;
 };
 
 

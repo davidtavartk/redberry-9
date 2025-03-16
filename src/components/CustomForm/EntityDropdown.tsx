@@ -1,13 +1,16 @@
 import { EntityDropdownProps } from "@/types/propTypes";
-import { FormInputTypes } from "@/types/types";
+import { EmployeeFormInputTypes, TaskFormInputTypes } from "@/types/types";
 import Image from "next/image";
 import { Button, ListBox, ListBoxItem, Popover, Select, SelectValue } from "react-aria-components";
+import CircleAvatar from "./CircleAvatar";
 
-const EntityDropdown = <T extends keyof FormInputTypes>({
+const EntityDropdown = <T extends keyof (EmployeeFormInputTypes | TaskFormInputTypes) | "priority" | "status">({
   name,
   selectedEntity,
   entities,
   isOpen,
+  dropdownWidth,
+  className,
   setIsOpen,
   setValue,
 }: EntityDropdownProps<T>) => {
@@ -21,13 +24,14 @@ const EntityDropdown = <T extends keyof FormInputTypes>({
       onSelectionChange={(key) => {
         const selected = entities.find((entity) => entity.id === key);
         if (selected) {
-          setValue(name, selected.name, { shouldValidate: true });
+          const displayValue = "surname" in selected ? `${selected.name} ${selected.surname}` : selected.name;
+          setValue(name, displayValue, { shouldValidate: true });
           setIsOpen(false);
         }
       }}
     >
       <Button
-        className={`flex w-full cursor-pointer items-center justify-between border border-[#CED4DA] p-3 text-left ${isOpen ? "rounded-b-none border-b-0" : "rounded-md"}`}
+        className={`flex w-full cursor-pointer items-center justify-between border border-[#CED4DA] p-3 text-left ${isOpen ? "rounded-b-none border-b-0" : "rounded-md"} ${className}`}
       >
         <SelectValue>{() => selectedEntity || ""}</SelectValue>
         <span aria-hidden="true" className={`transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}>
@@ -35,14 +39,22 @@ const EntityDropdown = <T extends keyof FormInputTypes>({
         </span>
       </Button>
       <Popover
-        className="rounded-md rounded-t-none border border-t-0 border-[#CED4DA] bg-white p-3 pb-1.5"
+        className={`rounded-md rounded-t-none border border-t-0 border-[#CED4DA] bg-white p-3 pb-1.5`}
+        style={{ width: `${dropdownWidth}px` }}
         placement="bottom start"
-        offset={-6}
+        offset={0}
       >
         <ListBox>
           {entities.map((entity) => (
-            <ListBoxItem key={entity.id} id={entity.id} className="h-[42px] cursor-pointer hover:scale-[101%]">
-              {entity.name}
+            <ListBoxItem key={entity.id} id={entity.id} className="h-[45px] cursor-pointer hover:scale-[101%]" textValue={"surname" in entity ? `${entity.name} ${entity.surname}` : entity.name}>
+              <div className="flex gap-3">
+                {"avatar" in entity ? (
+                  <CircleAvatar photoSrc={entity.avatar as string} size={28} />
+                ) : "icon" in entity ? (
+                  <CircleAvatar photoSrc={entity.icon  as string} size={28} />
+                ) : null}
+                {"surname" in entity ? `${entity.name} ${entity.surname}` : entity.name}
+              </div>
             </ListBoxItem>
           ))}
         </ListBox>
