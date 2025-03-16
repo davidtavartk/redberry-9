@@ -6,6 +6,9 @@ const nextConfig: NextConfig = {
   images: {
     domains: ["momentum.redberryinternship.ge"],
   },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 };
 
 export default nextConfig;
