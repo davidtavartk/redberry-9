@@ -10,7 +10,7 @@ export interface ButtonProps {
 
 export interface TaskStatusProps {
   className: string;
-  title: string;
+  status: string;
 }
 
 export interface FilterDropdownProps {

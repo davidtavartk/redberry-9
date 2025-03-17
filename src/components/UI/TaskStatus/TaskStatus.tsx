@@ -1,11 +1,20 @@
+import Card from "@/components/Card/Card";
 import { TaskStatusProps } from "@/types/propTypes";
 
-const TaskStatus = ({ title, className }: TaskStatusProps) => {
-  return <div className={`flex items-center justify-center py-[15px] rounded-[10px] w-full ${className}`}>
-    <span className="text-white text-[20px] font-medium">
-        {title}
-    </span>
-  </div>;
+const TaskStatus = ({ status, className, tasks }: TaskStatusProps) => {
+  return (
+    <div className="flex flex-col gap-[30px] w-full ">
+      <div className={`flex items-center justify-center rounded-[10px] py-[15px] ${className}`}>
+        <span className="text-[20px] font-medium text-white">{status}</span>
+      </div>
+
+      <div className="flex flex-col gap-[30px]">
+        {tasks.map((task) => (
+          <Card key={task.id} task={task} />
+        ))}
+      </div>
+    </div>
+  );
 };
 
 export default TaskStatus;

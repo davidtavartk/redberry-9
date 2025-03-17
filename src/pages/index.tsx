@@ -48,10 +48,10 @@ export default function Home() {
         <FilterDropdown title="თანამშრომელი" filters={employees} />
       </div>
       <div className="flex justify-between gap-20 mt-20">
-        <TaskStatus title="დასაწყები" className="bg-[#F7BC30]" />
-        <TaskStatus title="პროგრესში" className="bg-[#FB5607]" />
-        <TaskStatus title="მზად ტესტირებისთვის" className="bg-[#FF006E]" />
-        <TaskStatus title="დასრულებული" className="bg-[#3A86FF]" />
+        <TaskStatus status="დასაწყები" className="bg-[#F7BC30]" tasks={tasks}/>
+        <TaskStatus status="პროგრესში" className="bg-[#FB5607]"  tasks={[]} />
+        <TaskStatus status="მზად ტესტირებისთვის" className="bg-[#FF006E]"  tasks={[]} />
+        <TaskStatus status="დასრულებული" className="bg-[#3A86FF]"  tasks={[]} />
       </div>
     </div>
   );
