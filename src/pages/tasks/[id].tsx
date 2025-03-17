@@ -1,3 +1,4 @@
+import CommentsCard from "@/components/Comments/CommentsCard";
 import CircleAvatar from "@/components/CustomForm/CircleAvatar";
 import { getTaskById } from "@/services/taskServices";
 import { Task } from "@/types/types";
@@ -13,6 +14,7 @@ const TaskPage = () => {
   const [task, setTask] = useState<Task | null>(null);
 
   useEffect(() => {
+    if (!id) return;
     const fetchTask = async () => {
       try {
         const response = await getTaskById(Number(id));
@@ -85,7 +87,9 @@ const TaskPage = () => {
       </div>
 
       {/* Comments Section */}
-      <div className="flex-1"></div>
+      <div className="flex-1">
+        <CommentsCard taskId={Number(id)}/>
+      </div>
     </div>
   );
 };

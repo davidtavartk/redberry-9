@@ -35,6 +35,15 @@ export interface Task {
   total_comments: number;
 }
 
+export interface TaskComment {
+  id: number;
+  text: string;
+  task_id: number;
+  parent_id: number | null;
+  author_avatar: string;
+  author_nickname: string;
+}
+
 export type EmployeeFormInputTypes = {
   name: string;
   surname: string;

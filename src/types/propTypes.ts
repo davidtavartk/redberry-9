@@ -56,3 +56,7 @@ export interface EntityDropdownProps<T extends keyof (EmployeeFormInputTypes | T
 export interface CardProps {
   task: Task;
 }
+
+export interface CommentsCardProps {
+  taskId: number;
+}
