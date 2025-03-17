@@ -5,6 +5,7 @@ import { getTaskComments } from "@/services/generalServices";
 import { useEffect, useState } from "react";
 import { CommentsCardProps } from "@/types/propTypes";
 import { TaskComment } from "@/types/types";
+import EachComment from "./EachComment";
 
 const CommentsCard = ({ taskId }: CommentsCardProps) => {
   const [comments, setComments] = useState<TaskComment[]>([]);
@@ -54,6 +55,12 @@ const CommentsCard = ({ taskId }: CommentsCardProps) => {
           {comments.length}
         </span>
       </div>
+
+      <div className="flex flex-col gap-4">
+          {comments.map((comment) => (
+            <EachComment key={comment.id} comment={comment} />
+          ))}
+        </div>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import { Department, Priority, EmployeeFormInputTypes, TaskFormInputTypes, Task } from "./types";
+import { Department, Priority, EmployeeFormInputTypes, TaskFormInputTypes, Task, TaskComment } from "./types";
 
 export interface ButtonProps {
   filled?: boolean;
@@ -59,4 +59,9 @@ export interface CardProps {
 
 export interface CommentsCardProps {
   taskId: number;
+}
+
+export interface EachCommentProps {
+  isChildComment?: boolean;
+  comment: TaskComment;
 }
