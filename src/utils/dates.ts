@@ -12,3 +12,18 @@ export const formatGeorgianDate = (dateString: string): string => {
 
   return `${day} ${month}, ${year}`;
 };
+
+export const formatGeorgianDateWithWeekday = (dateString: string): string => {
+  const date = new Date(dateString);
+
+  const georgianWeekdays = [
+    "კვი", "ორშ", "სამ", "ოთხ", "ხუთ", "პარ", "შაბ"
+  ];
+  const weekday = georgianWeekdays[date.getDay()];
+
+  const day = String(date.getDate()).padStart(2, "0"); // Ensure two-digit day
+  const month = date.getMonth() + 1; // JS months are 0-based
+  const year = date.getFullYear();
+
+  return `${weekday} - ${day}/${month}/${year}`;
+};

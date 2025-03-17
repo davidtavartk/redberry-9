@@ -1,4 +1,4 @@
-import { Department, Priority, EmployeeFormInputTypes, TaskFormInputTypes } from "./types";
+import { Department, Priority, EmployeeFormInputTypes, TaskFormInputTypes, Task } from "./types";
 
 export interface ButtonProps {
   filled?: boolean;
@@ -11,6 +11,7 @@ export interface ButtonProps {
 export interface TaskStatusProps {
   className: string;
   status: string;
+  tasks: Task[];
 }
 
 export interface FilterDropdownProps {
@@ -50,4 +51,8 @@ export interface EntityDropdownProps<T extends keyof (EmployeeFormInputTypes | T
   setIsOpen: (isOpen: boolean) => void;
   setValue: (name: T, value: string, options?: { shouldValidate: boolean }) => void;
   dropdownWidth?: number;
+}
+
+export interface CardProps {
+  task: Task;
 }

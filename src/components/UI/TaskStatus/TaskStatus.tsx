@@ -1,5 +1,6 @@
 import Card from "@/components/Card/Card";
 import { TaskStatusProps } from "@/types/propTypes";
+import Link from "next/link";
 
 const TaskStatus = ({ status, className, tasks }: TaskStatusProps) => {
   return (
@@ -10,7 +11,10 @@ const TaskStatus = ({ status, className, tasks }: TaskStatusProps) => {
 
       <div className="flex flex-col gap-[30px]">
         {tasks.map((task) => (
-          <Card key={task.id} task={task} />
+            <Link key={task.id} href={`/tasks/${task.id}`}>
+
+                <Card key={task.id} task={task} />
+            </Link>
         ))}
       </div>
     </div>
