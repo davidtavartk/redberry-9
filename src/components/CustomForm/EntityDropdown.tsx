@@ -33,12 +33,22 @@ const EntityDropdown = <T extends keyof (EmployeeFormInputTypes | TaskFormInputT
         className={`flex w-full cursor-pointer items-center justify-between border border-[#CED4DA] p-3 text-left ${isOpen ? "rounded-b-none border-b-0" : "rounded-md"} ${className}`}
       >
         <SelectValue>
-  {() => {
-    const selected = entities.find((entity) => String(entity.id) === String(selectedEntity));
-    return selected ? selected.name : "აირჩიეთ დეპარტამენტი"; // ✅ Now updates correctly
-  }}
-</SelectValue>
+          {() => {
+            const selected = entities.find((entity) => String(entity.id) === String(selectedEntity));
 
+            // Define a mapping for known entity types
+            const placeholderMap: Record<string, string> = {
+              department: "აირჩიეთ დეპარტამენტი",
+              status: "აირჩიეთ სტატუსი",
+              priority: "აირჩიეთ პრიორიტეტი",
+            };
+
+            // Use the mapped placeholder or a default fallback
+            const placeholder = placeholderMap[name] || `აირჩიეთ ${name}`;
+
+            return selected ? selected.name : placeholder;
+          }}
+        </SelectValue>
 
         <span aria-hidden="true" className={`transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}>
           <Image src="/svgs/formArrow.svg" alt="arrow" width={14} height={14} />
