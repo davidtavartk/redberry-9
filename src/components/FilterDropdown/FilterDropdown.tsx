@@ -34,7 +34,7 @@ const FilterDropdown = ({ title, filters }: FilterDropdownProps) => {
                   key={filter.id}
                   isSelected={selectedFilters.includes(filter.name)}
                   onChange={() => toggleFilter(filter)}
-                  className="mb-2 flex cursor-pointer items-center gap-2"
+                  className="mb-2 flex cursor-pointer items-center gap-3.5"
                 >
                   <div
                     className={`flex size-[22px] items-center justify-center rounded-[6px] border-[1.5px] transition-all ${title !== "დეპარტამენტი" ? "border-c-purple" : ""} `}
@@ -44,7 +44,20 @@ const FilterDropdown = ({ title, filters }: FilterDropdownProps) => {
                     )}
                   </div>
 
-                  <span className="ml-2">{filter.name}</span>
+                  {title === "თანამშრომელი" && "avatar" in filter && "surname" in filter ? (
+                    <div className="flex items-center gap-2">
+                      <Image
+                        src={filter.avatar as string}
+                        alt="avatar"
+                        width={24}
+                        height={24}
+                        className="h-6 w-6 rounded-full object-cover"
+                      />
+                      <span className="ml-2">{`${filter.name} ${filter.surname}`}</span>
+                    </div>
+                  ) : (
+                    <span className="ml-2">{filter.name}</span>
+                  )}
                 </Checkbox>
               ))
             ) : (
