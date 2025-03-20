@@ -40,7 +40,7 @@ const EntityDropdown = <T extends keyof (EmployeeFormInputTypes | TaskFormInputT
               department: "აირჩიეთ დეპარტამენტი",
               status: "აირჩიეთ სტატუსი",
               priority: "აირჩიეთ პრიორიტეტი",
-              emoloyee: "აირჩიეთ თანამშრომელი",
+              employee: "აირჩიეთ თანამშრომელი",
             };
 
             const placeholder = placeholderMap[name] || `აირჩიეთ ${name}`;
