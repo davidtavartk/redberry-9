@@ -36,14 +36,13 @@ const EntityDropdown = <T extends keyof (EmployeeFormInputTypes | TaskFormInputT
           {() => {
             const selected = entities.find((entity) => String(entity.id) === String(selectedEntity));
 
-            // Define a mapping for known entity types
             const placeholderMap: Record<string, string> = {
               department: "აირჩიეთ დეპარტამენტი",
               status: "აირჩიეთ სტატუსი",
               priority: "აირჩიეთ პრიორიტეტი",
+              emoloyee: "აირჩიეთ თანამშრომელი",
             };
 
-            // Use the mapped placeholder or a default fallback
             const placeholder = placeholderMap[name] || `აირჩიეთ ${name}`;
 
             return selected ? selected.name : placeholder;
