@@ -24,7 +24,12 @@ const CreateTask = () => {
     setValue,
     watch,
     formState: { errors, isSubmitted },
-  } = useForm<TaskFormInputTypes>();
+  } = useForm<TaskFormInputTypes>({
+    defaultValues: {
+      priority: "2",
+      status: "2",
+    },
+  });
 
   const titleValue = watch("title", "");
   const descriptionValue = watch("description", "");
@@ -220,7 +225,7 @@ const CreateTask = () => {
                   className="bg-white"
                 />
                 {isSubmitted && errors.priority && (
-                  <p className="absolute bottom-[-18px] text-xs text-red-500">{errors.priority.message}</p>
+                  <p className="absolute bottom-[-22px] text-xs text-red-500">{errors.priority.message}</p>
                 )}
               </div>
               {/* Status Dropdown */}
@@ -237,7 +242,7 @@ const CreateTask = () => {
                   className="bg-white"
                 />
               {isSubmitted && errors.status && (
-                <p className="absolute bottom-[-18px] text-xs text-red-500">{errors.status.message}</p>
+                <p className="absolute bottom-[-22px] text-xs text-red-500">{errors.status.message}</p>
               )}
               </div>
             </div>

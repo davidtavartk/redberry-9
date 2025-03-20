@@ -45,7 +45,37 @@ const EntityDropdown = <T extends keyof (EmployeeFormInputTypes | TaskFormInputT
 
             const placeholder = placeholderMap[name] || `აირჩიეთ ${name}`;
 
-            return selected ? selected.name : placeholder;
+            if (!selected) {
+              return placeholder;
+            }
+
+            return (
+              <>
+                {"avatar" in selected && selected.avatar ? (
+                  <Image
+                    src={selected.avatar as string}
+                    alt="avatar"
+                    width={24}
+                    height={24}
+                    className="inline-block h-6 w-6 rounded-full object-cover"
+                  />
+                ) : "icon" in selected && selected.icon ? (
+                  <Image
+                    src={selected.icon as string}
+                    alt="icon"
+                    width={24}
+                    height={24}
+                    className="inline-block h-6 w-6 rounded-full object-cover"
+                  />
+                ) : null}
+
+                <span className="ml-2">
+                  <>
+                    {selected.name} {"surname" in selected && selected.surname ? selected.surname : ""}
+                  </>
+                </span>
+              </>
+            );
           }}
         </SelectValue>
 
