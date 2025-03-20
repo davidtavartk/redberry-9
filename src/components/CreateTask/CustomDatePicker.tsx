@@ -16,14 +16,19 @@ import {
   Popover,
 } from "react-aria-components";
 import type { PopoverProps } from "react-aria-components";
+import { parseDate } from "@internationalized/date";
 import CalendarIcon from "../../../public/svgs/svgComponent/CalendarIcon";
 import Image from "next/image";
 
 const CustomDatePicker = () => {
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const defaultDate = parseDate(tomorrow.toISOString().split("T")[0]);
+
   return (
     <I18nProvider locale="en-GB">
-      <DatePicker className="flex w-1/2 flex-col gap-1" aria-label="deadline">
-        <Group className="flex items-center gap-1.5 rounded-lg border border-[#DEE2E6] bg-white p-2.5 text-gray-700 ring-black transition">
+      <DatePicker className="flex w-1/2 flex-col gap-1" aria-label="deadline" defaultValue={defaultDate}>
+        <Group className="flex h-[49.6px] items-center gap-1.5 rounded-lg border border-[#DEE2E6] bg-white p-3 text-gray-700 ring-black transition">
           <Button className="flex cursor-pointer items-center">
             <CalendarIcon />
           </Button>
@@ -41,10 +46,10 @@ const CustomDatePicker = () => {
         <I18nProvider locale="ka-GE">
           <MyPopover>
             <Dialog className="p-6 text-gray-600">
-              <Calendar>
+              <Calendar minValue={defaultDate}>
                 <div className="flex">
                   <header className="flex w-full items-center gap-1 px-1 pb-4 font-serif">
-                    <Heading className="ml-2 flex-1 text-2xl font-semibold"/>
+                    <Heading className="ml-2 flex-1 text-2xl font-semibold" />
                   </header>
                   <Button
                     slot="previous"
