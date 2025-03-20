@@ -24,8 +24,7 @@ const EntityDropdown = <T extends keyof (EmployeeFormInputTypes | TaskFormInputT
       onSelectionChange={(key) => {
         const selected = entities.find((entity) => entity.id === key);
         if (selected) {
-          const displayValue = "surname" in selected ? `${selected.name} ${selected.surname}` : selected.name;
-          setValue(name, displayValue, { shouldValidate: true });
+          setValue(name, String(selected.id), { shouldValidate: true });
           setIsOpen(false);
         }
       }}
@@ -33,7 +32,14 @@ const EntityDropdown = <T extends keyof (EmployeeFormInputTypes | TaskFormInputT
       <Button
         className={`flex w-full cursor-pointer items-center justify-between border border-[#CED4DA] p-3 text-left ${isOpen ? "rounded-b-none border-b-0" : "rounded-md"} ${className}`}
       >
-        <SelectValue>{() => selectedEntity || ""}</SelectValue>
+        <SelectValue>
+  {() => {
+    const selected = entities.find((entity) => String(entity.id) === String(selectedEntity));
+    return selected ? selected.name : "აირჩიეთ დეპარტამენტი"; // ✅ Now updates correctly
+  }}
+</SelectValue>
+
+
         <span aria-hidden="true" className={`transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}>
           <Image src="/svgs/formArrow.svg" alt="arrow" width={14} height={14} />
         </span>
@@ -46,12 +52,17 @@ const EntityDropdown = <T extends keyof (EmployeeFormInputTypes | TaskFormInputT
       >
         <ListBox>
           {entities.map((entity) => (
-            <ListBoxItem key={entity.id} id={entity.id} className="h-[45px] cursor-pointer hover:scale-[101%]" textValue={"surname" in entity ? `${entity.name} ${entity.surname}` : entity.name}>
+            <ListBoxItem
+              key={entity.id}
+              id={entity.id}
+              className="h-[45px] cursor-pointer hover:scale-[101%]"
+              textValue={"surname" in entity ? `${entity.name} ${entity.surname}` : entity.name}
+            >
               <div className="flex gap-3">
                 {"avatar" in entity ? (
                   <CircleAvatar photoSrc={entity.avatar as string} size={28} />
                 ) : "icon" in entity ? (
-                  <CircleAvatar photoSrc={entity.icon  as string} size={28} />
+                  <CircleAvatar photoSrc={entity.icon as string} size={28} />
                 ) : null}
                 {"surname" in entity ? `${entity.name} ${entity.surname}` : entity.name}
               </div>

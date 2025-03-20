@@ -12,8 +12,6 @@ import { getDepartments } from "@/services/generalServices";
 import { Department, EmployeeFormInputTypes } from "@/types/types";
 import EntityDropdown from "./EntityDropdown";
 
-
-
 const CustomForm = ({ close }: CustomFormProps) => {
   const [fileName, setFileName] = useState<string | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
@@ -28,7 +26,11 @@ const CustomForm = ({ close }: CustomFormProps) => {
     trigger,
     resetField,
     formState: { errors, isSubmitted },
-  } = useForm<EmployeeFormInputTypes>({});
+  } = useForm<EmployeeFormInputTypes>({
+    defaultValues: {
+      department: "",
+    },
+  });
 
   const nameValue = watch("name", "");
   const surnameValue = watch("surname", "");
@@ -70,6 +72,7 @@ const CustomForm = ({ close }: CustomFormProps) => {
       formData.append("department_id", data.department);
 
       console.log(data);
+      console.log("Form Data:", Object.fromEntries(formData));
 
       // const response = await createEmployee(formData);
     } catch (error) {
@@ -90,6 +93,12 @@ const CustomForm = ({ close }: CustomFormProps) => {
   }, []);
 
   useEffect(() => {
+    register("department", {
+      required: "დეპარტამენტის არჩევა აუცილებელია",
+    });
+  }, [register]);
+
+  useEffect(() => {
     trigger("avatar");
   }, [trigger]);
 
@@ -99,12 +108,12 @@ const CustomForm = ({ close }: CustomFormProps) => {
         <div className="flex gap-[45px]">
           {/* Name */}
           <div className="flex flex-1 flex-col gap-1">
-            <Label title="სახელი" htmlFor="text" isRequired/>
+            <Label title="სახელი" htmlFor="text" isRequired />
             <input
               type="text"
               id="name"
               {...register("name", {
-                required: "Name is required",
+                required: "სახელის შეყვანა აუცილებელია",
                 minLength: { value: 2, message: "მინიმუმ 2 სიმბოლო" },
                 maxLength: { value: 255, message: "მაქსიმუმ 255 სიმბოლო" },
               })}
@@ -116,13 +125,18 @@ const CustomForm = ({ close }: CustomFormProps) => {
               className="h-[45px] rounded-md border border-[#CED4DA] p-2.5"
             />
             <div className="flex flex-col gap-1 text-[10px]">
+              {/* First Name Validation Messages */}
               <span
                 className={`flex items-center gap-1 ${
-                  nameValue.length >= 2 ? "text-green-500" : nameValue.length > 0 ? "text-red-400" : "text-[#6C757D]"
+                  nameValue.length >= 2
+                    ? "text-green-500"
+                    : isSubmitted && nameValue.length < 2
+                      ? "text-red-400"
+                      : "text-[#6C757D]"
                 }`}
               >
                 <CheckIcon
-                  fill={nameValue.length >= 2 ? "#00C951" : nameValue.length > 0 ? "red" : "#6C757D"}
+                  fill={nameValue.length >= 2 ? "#00C951" : isSubmitted && nameValue.length < 2 ? "red" : "#6C757D"}
                   width="16"
                   height="16"
                 />
@@ -153,7 +167,7 @@ const CustomForm = ({ close }: CustomFormProps) => {
           </div>
 
           <div className="flex flex-1 flex-col gap-1">
-            <Label title="გვარი" htmlFor="surname" isRequired/>
+            <Label title="გვარი" htmlFor="surname" isRequired />
 
             <input
               type="text"
@@ -171,13 +185,18 @@ const CustomForm = ({ close }: CustomFormProps) => {
               className="h-[45px] rounded-md border border-[#CED4DA] p-2.5"
             />
             <div className="flex flex-col gap-1 text-[10px]">
+              {/* Last Name Validation Messages */}
               <span
                 className={`flex items-center gap-1 ${
-                  surnameValue.length >= 2 ? "text-green-500" : surnameValue.length > 0 ? "text-red-400" : "text-[#6C757D]"
+                  surnameValue.length >= 2
+                    ? "text-green-500"
+                    : isSubmitted && surnameValue.length < 2
+                      ? "text-red-400"
+                      : "text-[#6C757D]"
                 }`}
               >
                 <CheckIcon
-                  fill={surnameValue.length >= 2 ? "#00C951" : surnameValue.length > 0 ? "red" : "#6C757D"}
+                  fill={surnameValue.length >= 2 ? "#00C951" : isSubmitted && surnameValue.length < 2 ? "red" : "#6C757D"}
                   width="16"
                   height="16"
                 />
@@ -217,7 +236,7 @@ const CustomForm = ({ close }: CustomFormProps) => {
 
         {/* Avatar Upload */}
         <div>
-          <Label title="ავატარი" htmlFor="photo" isRequired/>
+          <Label title="ავატარი" htmlFor="photo" isRequired />
           <div className="flex h-[120px] flex-col items-center justify-center rounded-lg border border-dashed border-[#CED4DA]">
             {preview ? (
               <CircleAvatar photoSrc={preview} onRemove={removeImage} />
@@ -230,17 +249,12 @@ const CustomForm = ({ close }: CustomFormProps) => {
               type="file"
               id="photo"
               accept="image/*"
-              // className="hidden"
+              className="hidden"
               {...register("avatar", {
                 required: "სურათის ატვირთვა აუცილებელია",
                 validate: {
                   isImage: (file) => {
                     if (!file) return "სურათის ატვირთვა აუცილებელია";
-                    if (file instanceof File) {
-                      const validTypes = ["image/jpeg", "image/png", "image/gif", "image/webp", "image/svg+xml"];
-                      return validTypes.includes(file.type) || "The avatar field must be an image.";
-                    }
-                    return "Invalid file format";
                   },
                 },
               })}
@@ -252,18 +266,24 @@ const CustomForm = ({ close }: CustomFormProps) => {
         </div>
 
         {/* Department */}
-        <div className="flex w-1/2 flex-col gap-1">
-          <Label title="დეპარტამენტი" htmlFor="department" isRequired/>
+        <div className="relative flex w-1/2 flex-col gap-1">
+          <Label title="დეპარტამენტი" htmlFor="department" isRequired />
           <EntityDropdown
             name="department"
             entities={departments}
             selectedEntity={selectedDepartment}
             isOpen={isOpen}
             setIsOpen={setIsOpen}
-            setValue={setValue}
+            setValue={(name, value) => {
+              setValue(name, value, { shouldValidate: true });
+              trigger(name);
+            }}
             dropdownWidth={384}
           />
         </div>
+        {isSubmitted && errors.department && (
+          <p className="absolute bottom-[230px] text-xs text-red-500">{errors.department.message}</p>
+        )}
       </div>
 
       <div className="flex gap-[15px] self-end">
