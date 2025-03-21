@@ -59,6 +59,7 @@ export type TaskFormInputTypes = {
   employee: string;
   priority: string;
   status: string;
+  due_date: string;
 };
 
 

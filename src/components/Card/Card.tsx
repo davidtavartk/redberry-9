@@ -11,7 +11,7 @@ const Card = ({ task, className }: CardProps) => {
   };
 
   return (
-    <div className="flex h-[217px] cursor-pointer flex-col gap-5 rounded-[15px] border p-5" style={{ borderColor: className }}>
+    <div className="flex h-[217px] justify-between cursor-pointer flex-col gap-5 rounded-[15px] border p-5" style={{ borderColor: className }}>
       <div className="flex items-center justify-between">
         <div className="flex gap-2">
           <span

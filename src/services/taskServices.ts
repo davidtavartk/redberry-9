@@ -1,5 +1,16 @@
 import { Task } from "@/types/types";
-import api from "./apiClient";
+import api, { personalToken } from "./apiClient";
+
+interface TaskPayload {
+  name: string;
+  description?: string;
+  due_date?: string;
+  status_id: number;
+  priority_id: number;
+  department_id: number;
+  employee_id?: number | null;
+};
+
 
 export const getAllTasks = async (): Promise<Task[]> => {
   try {
@@ -20,3 +31,21 @@ export const getTaskById = async (id: number): Promise<Task> => {
     throw error;
   }
 };
+
+
+
+export const createTask = async (taskData: TaskPayload): Promise<string> => {
+  try {
+    const response = await api.post<string>("/tasks", taskData, {
+      headers: {
+        Authorization: `Bearer ${personalToken}`,
+      },
+    });
+    console.log("Task Created:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error creating task:", error);
+    throw error;
+  }
+};
+

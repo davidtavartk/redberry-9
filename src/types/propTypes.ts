@@ -1,3 +1,4 @@
+import { UseFormSetValue, UseFormTrigger } from "react-hook-form";
 import { Department, Priority, EmployeeFormInputTypes, TaskFormInputTypes, Task, TaskComment, Employee } from "./types";
 
 export interface ButtonProps {
@@ -76,4 +77,9 @@ export interface FilterContainerProps {
   departments: Department[];
   priorities: Priority[];
   employees: Employee[];
+}
+
+export interface CustomDatePickerProps {
+  setValue: UseFormSetValue<TaskFormInputTypes>;
+  trigger: UseFormTrigger<TaskFormInputTypes>;
 }

@@ -90,23 +90,35 @@ const EntityDropdown = <T extends keyof (EmployeeFormInputTypes | TaskFormInputT
         offset={0}
       >
         <ListBox>
-          {entities.map((entity) => (
+          {entities.length > 0 ? (
+            entities.map((entity) => (
+              <ListBoxItem
+                key={entity.id}
+                id={entity.id}
+                className="h-[45px] cursor-pointer hover:scale-[101%]"
+                textValue={"surname" in entity ? `${entity.name} ${entity.surname}` : entity.name}
+              >
+                <div className="flex gap-3">
+                  {"avatar" in entity ? (
+                    <CircleAvatar photoSrc={entity.avatar as string} size={28} />
+                  ) : "icon" in entity ? (
+                    <CircleAvatar photoSrc={entity.icon as string} size={28} />
+                  ) : null}
+                  {"surname" in entity ? `${entity.name} ${entity.surname}` : entity.name}
+                </div>
+              </ListBoxItem>
+            ))
+          ) : (
             <ListBoxItem
-              key={entity.id}
-              id={entity.id}
-              className="h-[45px] cursor-pointer hover:scale-[101%]"
-              textValue={"surname" in entity ? `${entity.name} ${entity.surname}` : entity.name}
+              key="no-data"
+              id="no-data"
+              className="h-[45px] cursor-default text-gray-500"
+              textValue="No data available"
+              aria-disabled="true"
             >
-              <div className="flex gap-3">
-                {"avatar" in entity ? (
-                  <CircleAvatar photoSrc={entity.avatar as string} size={28} />
-                ) : "icon" in entity ? (
-                  <CircleAvatar photoSrc={entity.icon as string} size={28} />
-                ) : null}
-                {"surname" in entity ? `${entity.name} ${entity.surname}` : entity.name}
-              </div>
+              <div className="text-sm text-gray-500">არჩევანი არ არსებობს</div>
             </ListBoxItem>
-          ))}
+          )}
         </ListBox>
       </Popover>
     </Select>

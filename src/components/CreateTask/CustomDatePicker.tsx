@@ -16,18 +16,39 @@ import {
   Popover,
 } from "react-aria-components";
 import type { PopoverProps } from "react-aria-components";
-import { parseDate } from "@internationalized/date";
+import { CalendarDate } from "@internationalized/date";
 import CalendarIcon from "../../../public/svgs/svgComponent/CalendarIcon";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import { getTomorrowDate } from "@/utils/dates";
+import { CustomDatePickerProps } from "@/types/propTypes";
 
-const CustomDatePicker = () => {
-  const tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  const defaultDate = parseDate(tomorrow.toISOString().split("T")[0]);
+const CustomDatePicker = ({ setValue, trigger }: CustomDatePickerProps) => {
+  const [defaultDate] = useState<CalendarDate>(getTomorrowDate());
+
+  useEffect(() => {
+    const formattedDate = `${defaultDate.year}-${String(defaultDate.month).padStart(2, "0")}-${String(defaultDate.day).padStart(2, "0")}`;
+    setValue("due_date", formattedDate, { shouldValidate: true });
+    trigger("due_date");
+  }, [defaultDate, setValue, trigger]);
 
   return (
     <I18nProvider locale="en-GB">
-      <DatePicker className="flex w-1/2 flex-col gap-1" aria-label="deadline" defaultValue={defaultDate}>
+      <DatePicker
+        className="flex w-1/2 flex-col gap-1"
+        aria-label="due_date"
+        defaultValue={defaultDate}
+        onChange={(date) => {
+          if (date) {
+            const year = date.year;
+            const month = String(date.month).padStart(2, "0"); // Ensure two digits
+            const day = String(date.day).padStart(2, "0"); // Ensure two digits
+            const formattedDate = `${year}-${month}-${day}`; // YYYY-MM-DD format
+            setValue("due_date", formattedDate, { shouldValidate: true });
+            trigger("due_date");
+          }
+        }}
+      >
         <Group className="flex h-[49.6px] items-center gap-1.5 rounded-lg border border-[#DEE2E6] bg-white p-3 text-gray-700 ring-black transition">
           <Button className="flex cursor-pointer items-center">
             <CalendarIcon />

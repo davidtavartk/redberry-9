@@ -1,10 +1,9 @@
+import { CalendarDate, parseDate } from "@internationalized/date";
+
 export const formatGeorgianDate = (dateString: string): string => {
   const date = new Date(dateString);
 
-  const georgianMonths = [
-    "იანვ", "თებ", "მარ", "აპრ", "მაი", "ივნ",
-    "ივლ", "აგვ", "სექ", "ოქტ", "ნოე", "დეკ"
-  ];
+  const georgianMonths = ["იანვ", "თებ", "მარ", "აპრ", "მაი", "ივნ", "ივლ", "აგვ", "სექ", "ოქტ", "ნოე", "დეკ"];
 
   const day = date.getDate();
   const month = georgianMonths[date.getMonth()];
@@ -16,9 +15,7 @@ export const formatGeorgianDate = (dateString: string): string => {
 export const formatGeorgianDateWithWeekday = (dateString: string): string => {
   const date = new Date(dateString);
 
-  const georgianWeekdays = [
-    "კვი", "ორშ", "სამ", "ოთხ", "ხუთ", "პარ", "შაბ"
-  ];
+  const georgianWeekdays = ["კვი", "ორშ", "სამ", "ოთხ", "ხუთ", "პარ", "შაბ"];
   const weekday = georgianWeekdays[date.getDay()];
 
   const day = String(date.getDate()).padStart(2, "0"); // Ensure two-digit day
@@ -26,4 +23,12 @@ export const formatGeorgianDateWithWeekday = (dateString: string): string => {
   const year = date.getFullYear();
 
   return `${weekday} - ${day}/${month}/${year}`;
+};
+
+export const getTomorrowDate = (): CalendarDate => {
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  return parseDate(
+    `${tomorrow.getFullYear()}-${String(tomorrow.getMonth() + 1).padStart(2, "0")}-${String(tomorrow.getDate()).padStart(2, "0")}`,
+  );
 };
