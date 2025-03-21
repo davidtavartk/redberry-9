@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const personalToken = "9e68c438-82c7-4b07-b10f-0a8fd7cb4416";
+export const personalToken = "9e7cc5ba-31c9-4a65-89c3-44ba0ee96aac";
 const baseURL = "https://momentum.redberryinternship.ge/api";
 
 const api = axios.create({
