@@ -44,11 +44,7 @@ const TaskPage = () => {
         </div>
         <div className="flex flex-col gap-6 pt-10">
           <h2 className="text-c-grey text-[34px] font-semibold">{task.name}</h2>
-          <p className="text-lg leading-[150%]">
-            {task.description}lorem Lorem ipsum, dolor sit amet consectetur adipisicing elit. Natus rerum, in esse quisquam vel,
-            neque distinctio quae quibusdam alias architecto facilis nihil fuga quam, et rem obcaecati corrupti! Dolore,
-            nesciunt.{" "}
-          </p>
+          <p className="text-lg leading-[150%]">{task.description}</p>
         </div>
 
         {/* Task Details */}
@@ -88,7 +84,7 @@ const TaskPage = () => {
 
       {/* Comments Section */}
       <div className="flex-1 pb-10">
-        <CommentsCard taskId={Number(id)}/>
+        <CommentsCard taskId={Number(id)} />
       </div>
     </div>
   );

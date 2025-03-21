@@ -53,9 +53,13 @@ const CreateTask = () => {
       formData.append("priority_id", data.priority);
       formData.append("department_id", data.department);
       formData.append("due_date", data.due_date || "");
+     
 
       if (data.employee) {
         formData.append("employee_id", data.employee);
+      }
+      if (data.description) {
+        formData.append("description", data.description);
       }
 
       console.log("FORM DATA", Object.fromEntries(formData.entries()));

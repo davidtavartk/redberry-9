@@ -11,8 +11,7 @@ const EachComment = ({ comment, isChildComment = false, setReplyingTo, isReplyin
       <div className="flex flex-col gap-3">
         <h3 className="text-c-grey self-start text-lg leading-none font-medium">{comment.author_nickname}</h3>
         <p className="font-light text-[#343A40]">
-          {comment.text} Lorem ipsum dolor sit amet, consectetur adipisicing elit. Porro molestias vel repellendus sed numquam
-          officiis dolorem nemo tempore a, facere illo dolores consequatur. Velit, nesciunt magni. Optio nisi modi nesciunt.
+          {comment.text}
         </p>
         <span className="pt-2">
 

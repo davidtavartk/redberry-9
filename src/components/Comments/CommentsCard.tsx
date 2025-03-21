@@ -35,7 +35,17 @@ const CommentsCard = ({ taskId }: CommentsCardProps) => {
 
       const response = await createTaskComment(taskId, formData);
       console.log("Comment added:", response);
-      setComments((prev) => [response, ...prev]);
+      setComments((prev) => {
+        if (replyingTo) {
+          return prev.map((comment) =>
+            comment.id === replyingTo
+              ? { ...comment, sub_comments: [...(comment.sub_comments || []), response] }
+              : comment
+          );
+        }
+        return [response, ...prev];
+      });
+      
       toast.success("კომენტარი წარმატებით დაემატა");
       reset();
     } catch (error) {
