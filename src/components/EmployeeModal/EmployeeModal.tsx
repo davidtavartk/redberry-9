@@ -16,7 +16,7 @@ const EmployeeModal = () => {
           {({ close }) => (
             <>
               <div className="self-end">
-                <Button onPress={close} className="cursor-pointer"> {/* 🔥 Close on click */}
+                <Button onPress={close} className="cursor-pointer"> 
                   <Image src="/svgs/close.svg" alt="close" width={40} height={40} />
                 </Button>
               </div>

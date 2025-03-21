@@ -1,5 +1,5 @@
 import { FilterDropdownProps } from "@/types/propTypes";
-import { Department, Priority } from "@/types/types";
+import { Department, Employee, Priority } from "@/types/types";
 import Image from "next/image";
 import { useState } from "react";
 import { Button, Checkbox, Dialog, DialogTrigger, Popover } from "react-aria-components";
@@ -15,9 +15,16 @@ const FilterDropdown = ({ title, filters }: FilterDropdownProps) => {
 
   const dispatch = useDispatch();
 
-  const toggleFilter = (filter: Department | Priority) => {
-    setSelectedFilters((prev) => (prev.includes(filter.name) ? prev.filter((f) => f !== filter.name) : [...prev, filter.name]));
+  const toggleFilter = (filter: Department | Priority | Employee) => {
+    if (title === "თანამშრომელი") {
+      setSelectedFilters([filter.name]); 
+    } else {
+      setSelectedFilters((prev) => 
+        prev.includes(filter.name) ? prev.filter((f) => f !== filter.name) : [...prev, filter.name]
+      );
+    }
   };
+  
 
   const applyFilters = () => {
     const selectedIds = filters
@@ -57,7 +64,7 @@ const FilterDropdown = ({ title, filters }: FilterDropdownProps) => {
               filters.map((filter) => (
                 <Checkbox
                   key={filter.id}
-                  isSelected={selectedFilters.includes(filter.name)}
+                  isSelected={title === "თანამშრომელი" ? selectedFilters[0] === filter.name : selectedFilters.includes(filter.name)}
                   onChange={() => toggleFilter(filter)}
                   className="mb-2 flex cursor-pointer items-center gap-3.5"
                 >

@@ -21,8 +21,8 @@ export interface FilterDropdownProps {
 }
 
 export interface EmployeeModalProps {
-  isOpen: boolean;
-  onClose: () => void;
+  onClose?: () => void;
+  isOpen?: () => void;
 }
 
 export interface LabelProps {

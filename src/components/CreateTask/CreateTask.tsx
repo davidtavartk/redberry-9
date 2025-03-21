@@ -20,7 +20,6 @@ const CreateTask = () => {
   const [isEmployeeOpen, setIsEmployeeOpen] = useState<boolean>(false);
   const [isPriorityOpen, setIsPriorityOpen] = useState<boolean>(false);
   const [isStatusOpen, setIsStatusOpen] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const router = useRouter();
 
@@ -48,8 +47,6 @@ const CreateTask = () => {
 
   const onSubmit = async (data: TaskFormInputTypes) => {
     try {
-      setIsLoading(true);
-
       const formData = new FormData();
       formData.append("name", data.title);
       formData.append("status_id", data.status);
@@ -75,10 +72,10 @@ const CreateTask = () => {
     } catch (error) {
       console.error("Error creating task:", error);
       toast.error("დაფიქსირდა შეცდომა დავალების დამატებისას");
-    } finally {
-      setIsLoading(false);
     }
   };
+
+  
 
   useEffect(() => {
     const fetchData = async () => {

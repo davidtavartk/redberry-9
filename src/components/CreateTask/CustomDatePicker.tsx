@@ -49,7 +49,7 @@ const CustomDatePicker = ({ setValue, trigger }: CustomDatePickerProps) => {
           }
         }}
       >
-        <Group className="flex h-[49.6px] items-center gap-1.5 rounded-lg border border-[#DEE2E6] bg-white p-3 text-gray-700 ring-black transition">
+        <Group className="flex h-[49.6px] items-center gap-1.5 rounded-lg border border-[#CED4DA] bg-white p-3 text-gray-700 ring-black transition">
           <Button className="flex cursor-pointer items-center">
             <CalendarIcon />
           </Button>
