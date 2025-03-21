@@ -42,7 +42,9 @@ export interface TaskComment {
   parent_id: number | null;
   author_avatar: string;
   author_nickname: string;
+  sub_comments?: TaskComment[]; // ✅ Allow nested comments
 }
+
 
 export type EmployeeFormInputTypes = {
   name: string;
@@ -51,6 +53,10 @@ export type EmployeeFormInputTypes = {
   avatar: File;
   employee: string;
 };
+
+export type CommentFormTypes = {
+  text: string;
+}
 
 export type TaskFormInputTypes = {
   title: string;

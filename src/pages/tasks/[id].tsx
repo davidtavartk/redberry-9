@@ -87,7 +87,7 @@ const TaskPage = () => {
       </div>
 
       {/* Comments Section */}
-      <div className="flex-1">
+      <div className="flex-1 pb-10">
         <CommentsCard taskId={Number(id)}/>
       </div>
     </div>

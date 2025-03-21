@@ -66,6 +66,8 @@ export interface CommentsCardProps {
 export interface EachCommentProps {
   isChildComment?: boolean;
   comment: TaskComment;
+  setReplyingTo?: (id: number) => void;
+  isReplyingTo?: number | null;
 }
 
 export interface FilterCircleProps {
@@ -82,4 +84,8 @@ export interface FilterContainerProps {
 export interface CustomDatePickerProps {
   setValue: UseFormSetValue<TaskFormInputTypes>;
   trigger: UseFormTrigger<TaskFormInputTypes>;
+}
+
+export interface ReplyButtonProps {
+  onClick: () => void;
 }

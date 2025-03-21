@@ -50,3 +50,13 @@ export const getTaskComments = async (taskId: number): Promise<[TaskComment]> =>
     throw error;
   }
 };
+
+export const createTaskComment = async (taskId: number, commentData: { text: string; parent_id?: number | null }): Promise<TaskComment> => {
+  try {
+    const response = await api.post<TaskComment>(`/tasks/${taskId}/comments`, commentData);
+    return response.data;
+  } catch (error) {
+    console.error(`Error creating comment for task ${taskId}:`, error);
+    throw error;
+  }
+};
