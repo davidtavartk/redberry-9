@@ -11,12 +11,15 @@ import { CustomFormProps } from "@/types/propTypes";
 import { getDepartments } from "@/services/generalServices";
 import { Department, EmployeeFormInputTypes } from "@/types/types";
 import EntityDropdown from "./EntityDropdown";
+import { createEmployee } from "@/services/userServices";
+import { toast } from "react-toastify";
 
 const CustomForm = ({ close }: CustomFormProps) => {
   const [fileName, setFileName] = useState<string | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [departments, setDepartments] = useState<Department[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const {
     register,
@@ -25,6 +28,7 @@ const CustomForm = ({ close }: CustomFormProps) => {
     setValue,
     trigger,
     resetField,
+    reset,
     formState: { errors, isSubmitted },
   } = useForm<EmployeeFormInputTypes>({
     defaultValues: {
@@ -40,8 +44,8 @@ const CustomForm = ({ close }: CustomFormProps) => {
     const file = e.target.files?.[0];
 
     if (file) {
-      if (file.size > 1024 * 1024) {
-        alert("ატვირთეთ 1MB-ზე ნაკლები ზომის ფოტო");
+      if (file.size > 600 * 1024) {
+        alert("ატვირთეთ 600KB-ზე ნაკლები ზომის ფოტო");
         e.target.value = "";
         setFileName(null);
         setPreview(null);
@@ -62,21 +66,31 @@ const CustomForm = ({ close }: CustomFormProps) => {
 
   const onSubmit = async (data: EmployeeFormInputTypes) => {
     try {
-      const formData = new FormData();
+      setIsLoading(true);
 
+      const formData = new FormData();
       formData.append("name", data.name);
       formData.append("surname", data.surname);
-      if (data.avatar) {
-        formData.append("avatar", data.avatar);
-      }
+      formData.append("avatar", data.avatar[0]);
       formData.append("department_id", data.department);
 
-      console.log(data);
-      console.log("Form Data:", Object.fromEntries(formData));
+      console.log("FORM DATA", Object.fromEntries(formData.entries()));
 
-      // const response = await createEmployee(formData);
+      const response = await createEmployee(formData);
+      console.log("Agent added:", response);
+      toast.success("თანამშრომელი წარმატებით დაემატა");
+      setPreview(null);
+      reset();
+      setFileName(null);
+      close();
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
     } catch (error) {
       console.error("Error creating employee:", error);
+      toast.error("დაფიქსირდა შეცდომა თანამშრომლის დამატებისას");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -104,6 +118,7 @@ const CustomForm = ({ close }: CustomFormProps) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex h-full flex-col justify-between">
+      {isLoading && <p className=" text-sm font-medium">იტვირთება...</p>}
       <div className="flex h-full flex-col gap-[45px]">
         <div className="flex gap-[45px]">
           {/* Name */}
@@ -252,13 +267,13 @@ const CustomForm = ({ close }: CustomFormProps) => {
               className="hidden"
               {...register("avatar", {
                 required: "სურათის ატვირთვა აუცილებელია",
+                onChange: handleFileChange,
                 validate: {
                   isImage: (file) => {
                     if (!file) return "სურათის ატვირთვა აუცილებელია";
                   },
                 },
               })}
-              onChange={handleFileChange}
             />
           </div>
           {fileName && <p>ჩატვირთული ფოტო: {fileName}</p>}
@@ -287,7 +302,15 @@ const CustomForm = ({ close }: CustomFormProps) => {
       </div>
 
       <div className="flex gap-[15px] self-end">
-        <CustomButton type="button" onClick={close}>
+        <CustomButton
+          type="button"
+          onClick={() => {
+            reset();
+            setPreview(null);
+            setFileName(null);
+            close();
+          }}
+        >
           გაუქმება
         </CustomButton>
         <CustomButton type="submit" filled>

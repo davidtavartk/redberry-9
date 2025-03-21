@@ -1,4 +1,4 @@
-import { Department, Priority, EmployeeFormInputTypes, TaskFormInputTypes, Task, TaskComment } from "./types";
+import { Department, Priority, EmployeeFormInputTypes, TaskFormInputTypes, Task, TaskComment, Employee } from "./types";
 
 export interface ButtonProps {
   filled?: boolean;
@@ -65,4 +65,15 @@ export interface CommentsCardProps {
 export interface EachCommentProps {
   isChildComment?: boolean;
   comment: TaskComment;
+}
+
+export interface FilterCircleProps {
+  filter: string;
+  onRemove: () => void;
+}
+
+export interface FilterContainerProps {
+  departments: Department[];
+  priorities: Priority[];
+  employees: Employee[];
 }

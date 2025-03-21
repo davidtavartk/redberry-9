@@ -62,10 +62,10 @@ export type TaskFormInputTypes = {
 };
 
 
-// export interface Employee {
-//   id: number;
-//   name: string;
-//   surname: string;
-//   avatar: string;
-//   department_id: string;
-// }
+export interface Employee {
+  id: number;
+  name: string;
+  surname: string;
+  avatar: string;
+  department_id: string;
+}

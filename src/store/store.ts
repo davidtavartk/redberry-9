@@ -1,11 +1,18 @@
 import { configureStore } from '@reduxjs/toolkit'
+import taskFilterReducer from './taskFilterSlice'
+import { loadState, saveState } from '@/utils/loadState'
 
 export const store = configureStore({
   reducer: {
-    // posts: postsReducer,
-    // comments: commentsReducer,
-    // users: usersReducer
+    taskFilters: taskFilterReducer,
+  },
+  preloadedState: {
+    taskFilters: loadState() || undefined,
   }
+})
+
+store.subscribe(() => {
+  saveState(store.getState().taskFilters)
 })
 
 

@@ -5,20 +5,45 @@ import { useState } from "react";
 import { Button, Checkbox, Dialog, DialogTrigger, Popover } from "react-aria-components";
 import CustomButton from "../UI/Button/CustomButton";
 import CheckIcon from "../../../public/svgs/svgComponent/CheckIcon";
+import { useDispatch } from "react-redux";
+import { setDepartments, setEmployees, setPriorities } from "@/store/taskFilterSlice";
 
 const FilterDropdown = ({ title, filters }: FilterDropdownProps) => {
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
+
+  const dispatch = useDispatch();
 
   const toggleFilter = (filter: Department | Priority) => {
     setSelectedFilters((prev) => (prev.includes(filter.name) ? prev.filter((f) => f !== filter.name) : [...prev, filter.name]));
   };
 
   const applyFilters = () => {
-    console.log("Applied Filters:", selectedFilters);
+    const selectedIds = filters
+      .filter((filter) => selectedFilters.includes(filter.name))
+      .map((filter) => filter.id);
+  
+    if (title === "დეპარტამენტი") {
+      dispatch(setDepartments(selectedIds));
+      console.log("Selected Departments:", selectedIds);
+    }
+  
+    if (title === "პრიორიტეტი") {
+      dispatch(setPriorities(selectedIds));
+      console.log("Selected Priorities:", selectedIds);
+    }
+  
+    if (title === "თანამშრომელი") {
+      dispatch(setEmployees(selectedIds));
+      console.log("Selected Employees:", selectedIds);
+    }
+    setIsOpen(false);
   };
+  
 
   return (
-    <DialogTrigger>
+    <DialogTrigger isOpen={isOpen} onOpenChange={setIsOpen}>
       <Button className="flex cursor-pointer items-center gap-2 px-[18px] text-[#0D0F10]">
         {title}{" "}
         <span>

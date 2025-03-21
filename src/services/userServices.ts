@@ -15,9 +15,9 @@ interface EmployeePayload {
 //   department_id: number;
 // }
 
-export const createEmployee = async (employeeData: EmployeePayload): Promise<any> => {
+export const createEmployee = async (employeeData: EmployeePayload): Promise<string> => {
     try {  
-        const response = await api.post<any>("/employees", employeeData, {
+        const response = await api.post<string>("/employees", employeeData, {
         headers: {
           Authorization: `Bearer ${personalToken}`,
         },
