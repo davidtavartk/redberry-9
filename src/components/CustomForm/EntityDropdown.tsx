@@ -1,8 +1,10 @@
 import { EntityDropdownProps } from "@/types/propTypes";
 import { EmployeeFormInputTypes, TaskFormInputTypes } from "@/types/types";
 import Image from "next/image";
-import { Button, ListBox, ListBoxItem, Popover, Select, SelectValue } from "react-aria-components";
+import { Button, DialogTrigger, ListBox, ListBoxItem, Popover, Select, SelectValue } from "react-aria-components";
 import CircleAvatar from "./CircleAvatar";
+import CustomButton from "../UI/Button/CustomButton";
+import EmployeeModal from "../EmployeeModal/EmployeeModal";
 
 const EntityDropdown = <T extends keyof (EmployeeFormInputTypes | TaskFormInputTypes) | "priority" | "status">({
   name,
@@ -89,37 +91,50 @@ const EntityDropdown = <T extends keyof (EmployeeFormInputTypes | TaskFormInputT
         placement="bottom start"
         offset={0}
       >
-        <ListBox>
-          {entities.length > 0 ? (
-            entities.map((entity) => (
-              <ListBoxItem
-                key={entity.id}
-                id={entity.id}
-                className="h-[45px] cursor-pointer hover:scale-[101%]"
-                textValue={"surname" in entity ? `${entity.name} ${entity.surname}` : entity.name}
-              >
-                <div className="flex gap-3">
-                  {"avatar" in entity ? (
-                    <CircleAvatar photoSrc={entity.avatar as string} size={28} />
-                  ) : "icon" in entity ? (
-                    <CircleAvatar photoSrc={entity.icon as string} size={28} />
-                  ) : null}
-                  {"surname" in entity ? `${entity.name} ${entity.surname}` : entity.name}
-                </div>
-              </ListBoxItem>
-            ))
-          ) : (
-            <ListBoxItem
-              key="no-data"
-              id="no-data"
-              className="h-[45px] cursor-default text-gray-500"
-              textValue="No data available"
-              aria-disabled="true"
-            >
-              <div className="text-sm text-gray-500">არჩევანი არ არსებობს</div>
-            </ListBoxItem>
+        <div className={name === "employee" ? "space-y-3 pt-3" : ""}>
+          {name === "employee" && (
+            <div className="px-2">
+              <DialogTrigger onOpenChange={(isOpen) => !isOpen && setIsOpen(false)}>
+                <CustomButton className="!hover:bg-transparent !border-none !pl-0 flex gap-2 items-center justify-center mb-1"
+                >
+                <Image src="/svgs/addEmpl.svg" alt="deleteIcon" width={14} height={14} />
+                  დაამატე თანამშრომელი</CustomButton>
+                <EmployeeModal />
+              </DialogTrigger>
+            </div>
           )}
-        </ListBox>
+          <ListBox>
+            {entities && entities.length > 0 ? (
+              entities.map((entity) => (
+                <ListBoxItem
+                  key={entity.id}
+                  id={entity.id}
+                  className="h-[45px] cursor-pointer hover:scale-[101%]"
+                  textValue={"surname" in entity ? `${entity.name} ${entity.surname}` : entity.name}
+                >
+                  <div className="flex gap-3">
+                    {"avatar" in entity ? (
+                      <CircleAvatar photoSrc={entity.avatar as string} size={28} />
+                    ) : "icon" in entity ? (
+                      <CircleAvatar photoSrc={entity.icon as string} size={28} />
+                    ) : null}
+                    {"surname" in entity ? `${entity.name} ${entity.surname}` : entity.name}
+                  </div>
+                </ListBoxItem>
+              ))
+            ) : (
+              <ListBoxItem
+                key="no-data"
+                id="no-data"
+                className="h-[45px] cursor-default text-gray-500"
+                textValue="No data available"
+                aria-disabled="true"
+              >
+                <div className="text-sm text-gray-500">არჩევანი არ არსებობს</div>
+              </ListBoxItem>
+            )}
+          </ListBox>
+        </div>
       </Popover>
     </Select>
   );

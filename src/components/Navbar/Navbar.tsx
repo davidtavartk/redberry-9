@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-// import  { useState } from "react";
 import CustomButton from "../UI/Button/CustomButton";
 import EmployeeModal from "../EmployeeModal/EmployeeModal";
 import { DialogTrigger } from "react-aria-components";
